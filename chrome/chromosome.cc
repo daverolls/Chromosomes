@@ -47,10 +47,6 @@ Chromosome::mutate()
   order_[randPos1] = randCity2;
   order_[randPos2] = randCity1;
 
-  // Debugging
-  //for (auto iterate : order_) { std::cout << iterate << "."; }
-  //std::cout << "\n" << randCity1 << ":" << randCity2 << std::endl;
-
   //Might need to clear memory
 
   assert(is_valid());
@@ -76,7 +72,6 @@ Chromosome::recombine(const Chromosome* other)
     randPos1 = randPos2;
     randPos2 = newPermutation.back();
   }
-  //std::cout << "|"<< randPos1 << ":" << randPos2 << "|\n";
   // We make the new children, and we know this is allocating space for them as it uses the clone function
   auto child1 = create_crossover_child(this, other, randPos1, randPos2);
   auto child2 = create_crossover_child(other, this, randPos1, randPos2);
@@ -134,24 +129,13 @@ Chromosome::get_fitness() const
 bool
 Chromosome::is_valid() const
 {
-  //if(cities_ptr_->size() != order_.size())// If the size of the chromosome is bigger or smaller than the initial city
-  //  {return result;}    // the sizes of parents chromosomes, it returns false.
-
   // Initilizing a vector to comapre with
   std::vector<unsigned int> newPermutation;
   for (unsigned int i = 0; i < size_; ++i) { newPermutation.push_back( i ); }
-  //std::cout << size_ << "!" << newPermutation.size() << std::endl;      // Debugging
 
   //Checking if their the same length & make sure there's no repeated value in the permutation.
   bool answer1 = std::is_permutation(order_.cbegin(), order_.cend(), newPermutation.cbegin());
   bool answer2 = std::is_permutation(newPermutation.cbegin(), newPermutation.cend(), order_.cbegin());
-  // Debugging
-  /*
-  for (unsigned int i = 0; i < order_.size(); ++i) { std::cout << order_[i] << " "; }
-  std::cout << std::endl;
-  for (unsigned int i = 0; i < newPermutation.size(); ++i) { std::cout << newPermutation[i] << " "; }
-  std::cout << std::endl;
-  */
   // Obtaining the result and is done below so it looks easier to read
   return (answer1 && answer2);
 }
@@ -168,26 +152,3 @@ Chromosome::is_in_range(unsigned value, unsigned begin, unsigned end) const
   }
   return false;
 }
-
-// Testing the inner workings of the code
-/*
-int main(){
-  auto fin = std::ifstream("five.tsv");
-  Cities aCity;
-  fin >> aCity;
-  Chromosome a( &aCity);
-  auto b = a.clone();
-  std::cout << "Is valid?\t" << a.is_valid() << std::endl;
-  std::cout << "Is in range?\t" << a.is_in_range(3,4,5) << std::endl;
-  std::cout << "Is it fit?\t" << a.get_fitness() << std::endl;
-  a.mutate();
-  std::cout << "Is mutated?\t" << std::endl;
-  std::cout << "Is it fit?\t" << a.get_fitness() << std::endl;
-
-  std::cout << "Can it do it?" << "\n" << a.get_fitness() << ":" << b->get_fitness() << std::endl;
-  auto c = a.recombine(b);
-  std::cout << (c.first)->get_fitness() << "!" << (c.second)->get_fitness() << std::endl;
-
-  return 0;
-}
-*/
