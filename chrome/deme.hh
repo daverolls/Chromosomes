@@ -40,6 +40,9 @@ class Deme {
   unsigned size_;     // Size of the index
   double mut_rate_;  // Mutation rate (fraction in range [0,1])
   unsigned pop_size_; // Size of the population
+  std::vector<Chromosome*> organizedChance;   // Used in select_parent to decide on a slight skew which at random it should pick
+  double total = 0.0;     // Keeping track of the current record
+  double lowest = 0.0;      // Keeping track of the current record
 
   std::default_random_engine generator_; // A random number generator for the various methods
 };

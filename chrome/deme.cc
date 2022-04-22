@@ -51,6 +51,10 @@ void Deme::compute_next_generation()
     swapPop.push_back(childPair.first);
     swapPop.push_back(childPair.second);
   }
+  // Cleaning up
+  total = 0.0;
+  lowest = 0.0;
+  organizedChance.clear();      // Constains a lot of the same pointer
   for (auto chrome : pop_ ) { delete chrome; }    // Possible fix to memory error
   pop_ = swapPop; // Recreating population
 }
@@ -77,7 +81,30 @@ const Chromosome* Deme::get_best() const
 // return a pointer to that chromosome.
 Chromosome* Deme::select_parent()
 {
-  // Select at random a new position
-  unsigned randomSelect = std::rand()%(size_);  // Make randomly sorted vector to then pick the first element
-  return pop_.at(randomSelect);
+  // Select at random a new position based on a slight skew chance
+  std::vector<std::pair<Chromosome*, double>> frequencyOfApperance;
+  // If compute next generation just began. We need to create a skewed list that favors the higher genes
+  if ( organizedChance.size() == 0) {
+    double currentResult = 0.0;
+    std::pair<Chromosome*, double> swap;
+    for ( auto chrome : pop_ ){         // It will find the lowest fitness, and find the total sum of the fitness between all of the chromosomes.
+      currentResult = chrome->get_fitness();
+      total += currentResult;
+      if (currentResult < lowest || lowest == 0) { lowest = currentResult; }
+      swap.first = chrome;
+      swap.second = currentResult;
+      frequencyOfApperance.push_back(swap);
+    }
+
+    // Obtain chromosome & frequencyOfApperance to recreate Fitness proportion selection
+    for ( auto chromeValue : frequencyOfApperance ){
+      double frequencyOfChrome = (chromeValue.second / lowest);
+      for (; chromeValue.second >= frequencyOfChrome; chromeValue.second = chromeValue.second-frequencyOfChrome ){
+          organizedChance.push_back(chromeValue.first);    // Adding it to the main table it will use
+      }
+    }
+  }
+
+  unsigned randomSelect = std::rand()%(organizedChance.size());  // Make a rnage to randomly pick from
+  return organizedChance.at(randomSelect);
 }
