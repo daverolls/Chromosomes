@@ -32,12 +32,8 @@ Chromosome::~Chromosome()
 void
 Chromosome::mutate()
 {
-  std::vector<unsigned int> newPermutation; //Giving a vector so it can be randommized
-  for (unsigned int i = 0; i < size_; ++i) { newPermutation.push_back( i ); } //a new permutation of all the numbers from 0 to len-1
-
-  std::random_device randomDevice; //random_device is a integer random number generator
-  std::mt19937 generator(randomDevice()); //Pseudo-random generator of 32-bit numbers with a size of 19937 bits
-  std::shuffle(begin(newPermutation), end(newPermutation), generator); //using std::shuffle to "shuffle"
+  // Obtains a new permutation to mess with.
+  auto newPermutation = random_permutation(cities_ptr_->size());
 
   // Obtianing our two new randomly choosen positions to check in "order".
   unsigned int randPos1 = newPermutation.back();
@@ -69,9 +65,28 @@ Chromosome::recombine(const Chromosome* other)
   assert(is_valid());
   assert(other->is_valid());
 
-  // Add your implementation here
-  std::pair<Chromosome*, Chromosome*> quiet;
-  return quiet;
+  // Obtains a new permutation to mess with.
+  auto newPermutation = random_permutation(cities_ptr_->size());
+
+  // Obtianing our two new randomly choosen positions to check in "order".
+  unsigned int randPos1 = newPermutation.back();
+  unsigned int randPos2 = newPermutation.front();
+
+  if ( randPos1 > randPos2 ) {
+    randPos1 = randPos2;
+    randPos2 = newPermutation.back();
+  }
+  //std::cout << "|"<< randPos1 << ":" << randPos2 << "|\n";
+  // We make the new children, and we know this is allocating space for them as it uses the clone function
+  auto child1 = create_crossover_child(this, other, randPos1, randPos2);
+  auto child2 = create_crossover_child(other, this, randPos1, randPos2);
+
+  std::pair<Chromosome*, Chromosome*> newPair;
+
+  newPair.first = child1;
+  newPair.second = child2;
+
+  return newPair;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -148,7 +163,7 @@ bool
 Chromosome::is_in_range(unsigned value, unsigned begin, unsigned end) const
 {
   // Iterate throught order_ based on whats defined above to find "value"
-  for ( unsigned int i = begin /*Assuming it will always begin >= 1*/; i <= end; ++i ){
+  for ( unsigned int i = begin /*Assuming it will always begin >= 1*/; i < end; ++i ){
     if ( value == order_[i]) { return true; }
   }
   return false;
@@ -161,12 +176,17 @@ int main(){
   Cities aCity;
   fin >> aCity;
   Chromosome a( &aCity);
+  auto b = a.clone();
   std::cout << "Is valid?\t" << a.is_valid() << std::endl;
   std::cout << "Is in range?\t" << a.is_in_range(3,4,5) << std::endl;
   std::cout << "Is it fit?\t" << a.get_fitness() << std::endl;
   a.mutate();
   std::cout << "Is mutated?\t" << std::endl;
   std::cout << "Is it fit?\t" << a.get_fitness() << std::endl;
+
+  std::cout << "Can it do it?" << "\n" << a.get_fitness() << ":" << b->get_fitness() << std::endl;
+  auto c = a.recombine(b);
+  std::cout << (c.first)->get_fitness() << "!" << (c.second)->get_fitness() << std::endl;
 
   return 0;
 }
