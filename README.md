@@ -88,5 +88,5 @@ This allows the bigger values to be knocked off early, and leaving behind the sm
 Valgrind: No memory leaks! Or atleast that what it claims
 
 Command used:
-g++ -g -Wall -Wextra -pedantic -Werror -std=c++17 cities.cc chromosome.cc deme.cc tsp.cc -o tsp
-"./tsp challenge.tsv 100 0.001" which gives an estimate between 13k (worst) to 10k (best)
+1. g++ -g -Wall -Wextra -pedantic -Werror -std=c++17 cities.cc chromosome.cc deme.cc tsp.cc -o tsp
+2. "./tsp challenge.tsv 100 0.001" which gives an estimate between 13k (worst) to 10k (best)
