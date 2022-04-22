@@ -53,7 +53,6 @@ void Deme::compute_next_generation()
   }
   for (auto chrome : pop_ ) { delete chrome; }    // Possible fix to memory error
   pop_ = swapPop; // Recreating population
-  delete[] swapPop;
 }
 
 // Return a copy of the chromosome with the highest fitness.
