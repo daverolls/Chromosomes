@@ -43,4 +43,7 @@ Mut_rate, pop_size, and the cities_ptr->size()-1.
 Random population constructor.
 
 Myrandom:
-A helper function we implemented to use in compute_next_generation
+A helper function we implemented to use in compute_next_generation. It's a double type random number generator.
+
+Compute_next_generation:
+1. Select pop_size/2 pairs of chromosomes
