@@ -53,6 +53,7 @@ void Deme::compute_next_generation()
   }
   pop_.clear();   // Deleting all of the old ones
   pop_ = swapPop; // Recreating population
+  delete[] swapPop;
 }
 
 // Return a copy of the chromosome with the highest fitness.
