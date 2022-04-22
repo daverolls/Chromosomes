@@ -125,6 +125,7 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
   return child;
 }
 
+//////////////////////////////////////////////////////////////////////////////
 // Return a positive fitness value, with higher numbers representing
 // fitter solutions (shorter total-city traversal path).
 double
@@ -133,6 +134,7 @@ Chromosome::get_fitness() const
   return calculate_total_distance(); // fitness would be the total path distance of a permutation
 }
 
+//////////////////////////////////////////////////////////////////////////////
 // A chromsome is valid if it has no repeated values in its permutation,
 // as well as no indices above the range (length) of the chromosome.
 bool
@@ -149,6 +151,7 @@ Chromosome::is_valid() const
   return (answer1 && answer2);
 }
 
+//////////////////////////////////////////////////////////////////////////////
 // Find whether a certain value appears in a given range of the chromosome.
 // Returns true if value is within the specified the range specified
 // [begin, end) and false otherwise.
