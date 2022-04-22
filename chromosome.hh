@@ -61,7 +61,7 @@ class Chromosome {
     return order_;
   }
 
- protected:
+ //protected:
   // For an ordered set of parents, return a child using the ordered crossover.
   // The child will have the same values as p1 in the range [begin,end),
   // and all the other values in the same order as in p2.
@@ -80,7 +80,7 @@ class Chromosome {
   // [begin, end) and false otherwise.
   bool is_in_range(unsigned value, unsigned begin, unsigned end) const;
 
-  const unsigned int size_;  // How it initially began
+  unsigned int size_;  // How it initially began
   const Cities* cities_ptr_; // Keep ptr to cities, no need for full copy
   Cities::permutation_t order_;  // The actual permutation of this chromosome
 
