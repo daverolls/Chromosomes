@@ -36,8 +36,17 @@ Chromosome::mutate()
   auto newPermutation = random_permutation(cities_ptr_->size());
 
   // Obtianing our two new randomly choosen positions to check in "order".
-  unsigned int randPos1 = newPermutation.back();
-  unsigned int randPos2 = newPermutation.front();
+  unsigned int randPos1 = std::rand()%((cities_ptr_->size())-1);
+  unsigned int randPos2 = std::rand()%((cities_ptr_->size())-1);
+
+  while (randPos1 >= randPos2){
+      if (randPos2 == 0){
+
+          randPos2 = std::rand()%((cities_ptr_->size())-1);
+
+      }
+      randPos1 = std::rand()%((cities_ptr_->size())-1);
+  }
 
   // Obtaining position of the cities
   auto randCity1 = order_.at(randPos1);
@@ -61,17 +70,17 @@ Chromosome::recombine(const Chromosome* other)
   assert(is_valid());
   assert(other->is_valid());
 
-  // Obtains a new permutation to mess with.
-  auto newPermutation = random_permutation(cities_ptr_->size());
+  // Obtaining our two new randomly choosen positions to check in "order".
+  unsigned int randPos1 = std::rand()%((cities_ptr_->size())-1);
+  unsigned int randPos2 = std::rand()%((cities_ptr_->size())-1);
 
-  // Obtianing our two new randomly choosen positions to check in "order".
-  unsigned int randPos1 = newPermutation.back();
-  unsigned int randPos2 = newPermutation.front();
-
-  if ( randPos1 > randPos2 ) {
-    randPos1 = randPos2;
-    randPos2 = newPermutation.back();
+  while (randPos1 >= randPos2){
+      if (randPos2 == 0){
+        randPos2 = std::rand()%((cities_ptr_->size())-1);
+      }
+      randPos1 = std::rand()%((cities_ptr_->size())-1);
   }
+        
   // We make the new children, and we know this is allocating space for them as it uses the clone function
   auto child1 = create_crossover_child(this, other, randPos1, randPos2);
   auto child2 = create_crossover_child(other, this, randPos1, randPos2);
