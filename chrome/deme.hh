@@ -42,7 +42,7 @@ class Deme {
   unsigned pop_size_; // Size of the population
   std::vector<Chromosome*> organizedChance;   // Used in select_parent to decide on a slight skew which at random it should pick
   double total = 0.0;     // Keeping track of the current record
-  double lowest = 0.0;      // Keeping track of the current record
+  double highest = 0.0;      // Keeping track of the current record
 
   std::default_random_engine generator_; // A random number generator for the various methods
 };

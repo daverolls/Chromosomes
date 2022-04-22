@@ -16,7 +16,7 @@ Deme::Deme(const Cities* cities_ptr, unsigned pop_size, double mut_rate)
   size_ = cities_ptr->size()-1;
 
   // Constructing our population based on math
-  for (unsigned i = 0; i <= pop_size; ++i) { pop_.push_back(new Chromosome( cities_ptr )); }
+  for (unsigned int i = 0; i <= pop_size; ++i) { pop_.push_back(new Chromosome( cities_ptr )); }
 }
 
 // Clean up as necessary
@@ -41,7 +41,6 @@ void Deme::compute_next_generation()
   for (int i = 0; i < max; ++i){
     Chromosome* const parent1 = select_parent();
     Chromosome* const parent2 = select_parent();
-
     // Might mutate parent
     if ( myrandom() < mut_rate_ ) { parent1->mutate(); }
     if ( myrandom() < mut_rate_ ) { parent2->mutate(); }
@@ -53,7 +52,7 @@ void Deme::compute_next_generation()
   }
   // Cleaning up
   total = 0.0;
-  lowest = 0.0;
+  highest = 0.0;
   organizedChance.clear();      // Constains a lot of the same pointer
   for (auto chrome : pop_ ) { delete chrome; }    // Possible fix to memory error
   pop_ = swapPop; // Recreating population
@@ -64,14 +63,14 @@ const Chromosome* Deme::get_best() const
 {
   // Defining
   Chromosome* bestChrome;
-  double highest = -1.0;    // It's impossible for negative number, so its a good first case
+  double absoluteLowest = -1.0;    // It's impossible for negative number, so its a good first case
 
   // Iterate all of the population
   for ( auto chrome : pop_) {
     //std::cout << chrome->get_fitness() << std::endl;
-    if ( highest > chrome->get_fitness() || highest < 0 ) {
+    if ( absoluteLowest > chrome->get_fitness() || absoluteLowest < 0 ) {
       bestChrome = chrome;
-      highest = bestChrome->get_fitness();
+      absoluteLowest = bestChrome->get_fitness();
     }
   }
   return bestChrome;
@@ -87,24 +86,22 @@ Chromosome* Deme::select_parent()
   if ( organizedChance.size() == 0) {
     double currentResult = 0.0;
     std::pair<Chromosome*, double> swap;
-    for ( auto chrome : pop_ ){         // It will find the lowest fitness, and find the total sum of the fitness between all of the chromosomes.
+    for ( auto chrome : pop_ ){         // It will find the highest fitness, and find the total sum of the fitness between all of the chromosomes.
       currentResult = chrome->get_fitness();
       total += currentResult;
-      if (currentResult < lowest || lowest == 0) { lowest = currentResult; }
+      if (currentResult > highest || highest == 0.0) { highest = currentResult; }
       swap.first = chrome;
       swap.second = currentResult;
       frequencyOfApperance.push_back(swap);
     }
-
-    // Obtain chromosome & frequencyOfApperance to recreate Fitness proportion selection
+    // Obtain chromosome & frequencyOfApperance to recreate Fitness proportion selection but for lower numbers by doing everything inversely
     for ( auto chromeValue : frequencyOfApperance ){
-      double frequencyOfChrome = (chromeValue.second / lowest);
-      for (; chromeValue.second >= frequencyOfChrome; chromeValue.second = chromeValue.second-frequencyOfChrome ){
-          organizedChance.push_back(chromeValue.first);    // Adding it to the main table it will use
+      for (double frequencyOfChrome = (total / highest); chromeValue.second <= highest; chromeValue.second += frequencyOfChrome ){
+          organizedChance.push_back(chromeValue.first);    // Adding it to the main table it will use based on that frequency
       }
     }
   }
 
-  unsigned randomSelect = std::rand()%(organizedChance.size());  // Make a rnage to randomly pick from
+  unsigned int randomSelect = std::rand()%(organizedChance.size());  // Make a rnage to randomly pick from
   return organizedChance.at(randomSelect);
 }
