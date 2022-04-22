@@ -89,4 +89,5 @@ Valgrind: No memory leaks! Or atleast that what it claims
 
 Command used:
 1. g++ -g -Wall -Wextra -pedantic -Werror -std=c++17 cities.cc chromosome.cc deme.cc tsp.cc -o tsp
-2. "./tsp challenge.tsv 100 0.001" which gives an estimate between 13k (worst) to 10k (best)
+2. "./tsp challenge.tsv 100 0.0005" which gives an estimate between 13k (worst) to 10k (best)
+3. Absolute lowest so far with the command above is 10095.2 It will have its photo as well from gnuplot
