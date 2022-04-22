@@ -25,6 +25,10 @@ Get_fitness:
 1. fitness is the total path distance of a permutation, so just return calculate_total_distance().
 
 Is_valid:
-1. This method checks whether a chromosome has repeated values or indices above the range 
+1. This method checks whether a chromosome has repeated values or indices above the range. 
+2. A vector "newPermutation" created for comparison. 
+3. We used std::is_permutation to check it 
+4. It returns true only if the random permutation is a valid permutation.
 
- 
+Is_in_range:
+1. We set a for loop to scan from "begin" to "end" of                random_permutation, and if "value" is detected within the range    of random_permutation, it returns true.
