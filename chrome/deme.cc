@@ -22,7 +22,7 @@ Deme::Deme(const Cities* cities_ptr, unsigned pop_size, double mut_rate)
 // Clean up as necessary
 Deme::~Deme()
 {
-  // Add your implementation here
+  for (auto chrome : pop_ ) { delete chrome; }
 }
 
 double myrandom () {auto a = static_cast <double> (rand()) / static_cast <double> (1); return a;}
@@ -51,7 +51,7 @@ void Deme::compute_next_generation()
     swapPop.push_back(childPair.first);
     swapPop.push_back(childPair.second);
   }
-  pop_.clear();   // Deleting all of the old ones
+  for (auto chrome : pop_ ) { delete chrome; }    // Possible fix to memory error
   pop_ = swapPop; // Recreating population
   delete[] swapPop;
 }
