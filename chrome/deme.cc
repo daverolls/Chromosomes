@@ -13,7 +13,7 @@ Deme::Deme(const Cities* cities_ptr, unsigned pop_size, double mut_rate)
   // Defining
   mut_rate_ = mut_rate;
   pop_size_ = pop_size;
-  size_ = cities_ptr->size()-1;
+  size_ = cities_ptr->size();
 
   // Constructing our population based on math
   for (unsigned i = 0; i <= pop_size; ++i) { pop_.push_back(new Chromosome( cities_ptr )); }
@@ -78,6 +78,6 @@ const Chromosome* Deme::get_best() const
 Chromosome* Deme::select_parent()
 {
   // Select at random a new position
-  unsigned randomSelect = std::rand()%(size_);  // Make randomly sorted vector to then pick the first element
+  unsigned randomSelect = (random_permutation(pop_size_)).front();  // Make randomly sorted vector to then pick the first element
   return pop_.at(randomSelect);
 }
