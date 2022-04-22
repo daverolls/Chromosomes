@@ -1,6 +1,8 @@
 Dubin Nam, Alonzo Ortiz-Sanchez
 
-Chromosome.cc: 
+---------------------------------------------------------------------------------------------------- 
+
+<Chromosome.cc>
 
 Constructor:
 Just a simple constructor consisting of cities_ptr_, order_, generator_, and size_ for the initial size
@@ -31,4 +33,14 @@ Is_valid:
 4. It returns true only if the random permutation is a valid permutation.
 
 Is_in_range:
-1. We set a for loop to scan from "begin" to "end" of                random_permutation, and if "value" is detected within the range    of random_permutation, it returns true.
+1. We set a for loop to scan from "begin" to "end" of random_permutation, and if "value" is detected within the range of random_permutation, it returns true.
+
+----------------------------------------------------------------------------------------------------
+<Deme.cc>
+
+Constructor:
+Mut_rate, pop_size, and the cities_ptr->size()-1.
+Random population constructor.
+
+Myrandom:
+A helper function we implemented to use in compute_next_generation
