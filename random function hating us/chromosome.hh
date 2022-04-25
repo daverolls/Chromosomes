@@ -87,7 +87,8 @@ class Chromosome {
 
   std::default_random_engine generator_; // A random number generator for the various methods
 
-
-private:
-  // For other stuff here
+  int myrandom_int_size () {
+    std::uniform_int_distribution<int> distribution(0, size_);
+    return (distribution(generator_));
+  }
 };

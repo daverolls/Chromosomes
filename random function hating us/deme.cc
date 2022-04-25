@@ -28,11 +28,6 @@ Deme::~Deme()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// A simple helper function to help us get a random value
-// The random value is fixed between [0-1)
-double myrandom () { return (double)rand()/(RAND_MAX + 1.0)+12+(rand()%5); }
-
-//////////////////////////////////////////////////////////////////////////////
 // Evolve a single generation of new chromosomes, as follows:
 // We select pop_size/2 pairs of chromosomes (using the select() method below).
 // Each chromosome in the pair can be randomly selected for mutation, with
@@ -46,11 +41,13 @@ void Deme::compute_next_generation()
   std::vector<Chromosome*> swapPop;
   int max = floor((pop_size_)/2);
   for (int i = 0; i < max; ++i){
-    Chromosome* const parent1 = select_parent();
-    Chromosome* const parent2 = select_parent();
+    Chromosome* parent1 = select_parent();
+    Chromosome* parent2 = select_parent();
+    if (parent1 == parent2) { parent2 = select_parent(); }  // When their equal
+
     // Might mutate parent
-    if ( myrandom() < mut_rate_ ) { parent1->mutate(); }
-    if ( myrandom() < mut_rate_ ) { parent2->mutate(); }
+    if ( myrandom_double() < mut_rate_ ) { parent1->mutate(); }
+    if ( myrandom_double() < mut_rate_ ) { parent2->mutate(); }
 
     // Generating our child pair
     auto childPair = parent1->recombine(parent2);
@@ -59,7 +56,6 @@ void Deme::compute_next_generation()
   }
   // Cleaning up memory
   for (auto chrome : pop_ ) { delete chrome; }    // Possible fix to memory error
-  total = 0;
   pop_ = swapPop; // Recreating population
 }
 
@@ -73,7 +69,6 @@ const Chromosome* Deme::get_best() const
 
   // Iterate all of the population
   for ( auto chrome : pop_) {
-    //std::cout << chrome->get_fitness() << std::endl;
     if ( absoluteLowest > chrome->get_fitness() || absoluteLowest < 0 ) {
       bestChrome = chrome;
       absoluteLowest = bestChrome->get_fitness();
@@ -90,15 +85,10 @@ const Chromosome* Deme::get_best() const
 // However it's made inversely from the actual implementation
 Chromosome* Deme::select_parent()
 {
-  //
-  get_fitness_proportion_total();
-
-//
-  double randNum = myrandom();
+  double total = get_fitness_proportion_total();
+  double randNum = myrandom_double();
   double probability = 0;
-  std::cout << randNum << std::endl;
-
-  //
+  
   for ( auto chromeptr : pop_ ){   // save the fractions of probability for each chromosome to be choosen
     probability += ((chromeptr->get_fitness())/total);
     if ( probability > randNum ) { return chromeptr; }

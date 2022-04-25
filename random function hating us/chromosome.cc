@@ -15,7 +15,7 @@ Chromosome::Chromosome(const Cities* cities_ptr)
     order_(random_permutation(cities_ptr->size())),
     generator_(rand())
 {
-  size_ = cities_ptr->size();      // Keeping track of the size it began with
+  size_ = cities_ptr->size()-1;      // Keeping track of the size it began with
   assert(is_valid());
 }
 
@@ -35,16 +35,16 @@ Chromosome::mutate()
   auto newPermutation = random_permutation(cities_ptr_->size());
 
   // Obtianing our two new randomly choosen positions to check in "order".
-  unsigned int randPos1 = std::rand()%((cities_ptr_->size())-1);
-  unsigned int randPos2 = std::rand()%((cities_ptr_->size())-1);
+  unsigned int randPos1 = myrandom_int_size();
+  unsigned int randPos2 = myrandom_int_size();
 
   while (randPos1 >= randPos2){
       if (randPos2 == 0){
 
-          randPos2 = std::rand()%((cities_ptr_->size())-1);
+          randPos2 = myrandom_int_size();
 
       }
-      randPos1 = std::rand()%((cities_ptr_->size())-1);
+      randPos1 = myrandom_int_size();
   }
 
   // Obtaining position of the cities
@@ -54,8 +54,6 @@ Chromosome::mutate()
   // Saving their new position by our modification
   order_[randPos1] = randCity2;
   order_[randPos2] = randCity1;
-
-  //Might need to clear memory
 
   assert(is_valid());
 }
@@ -70,14 +68,14 @@ Chromosome::recombine(const Chromosome* other)
   assert(other->is_valid());
 
   // Obtaining our two new randomly choosen positions to check in "order".
-  unsigned int randPos1 = std::rand()%((cities_ptr_->size())-1);
-  unsigned int randPos2 = std::rand()%((cities_ptr_->size())-1);
+  unsigned int randPos1 = myrandom_int_size();
+  unsigned int randPos2 = myrandom_int_size();
 
   while (randPos1 >= randPos2){
       if (randPos2 == 0){
-        randPos2 = std::rand()%((cities_ptr_->size())-1);
+        randPos2 = myrandom_int_size();
       }
-      randPos1 = std::rand()%((cities_ptr_->size())-1);
+      randPos1 = myrandom_int_size();
   }
 
   // We make the new children, and we know this is allocating space for them as it uses the clone function
@@ -132,7 +130,6 @@ Chromosome::get_fitness() const
 {
   double fitness_= (1/calculate_total_distance());
   return fitness_;
-
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -143,7 +140,7 @@ Chromosome::is_valid() const
 {
   // Initilizing a vector to comapre with
   std::vector<unsigned int> newPermutation;
-  for (unsigned int i = 0; i < size_; ++i) { newPermutation.push_back( i ); }
+  for (unsigned int i = 0; i <= size_; ++i) { newPermutation.push_back( i ); }
 
   //Checking if their the same length & make sure there's no repeated value in the permutation.
   bool answer1 = std::is_permutation(order_.cbegin(), order_.cend(), newPermutation.cbegin());
@@ -160,7 +157,7 @@ bool
 Chromosome::is_in_range(unsigned value, unsigned begin, unsigned end) const
 {
   // Iterate throught order_ based on whats defined above to find "value"
-  for ( unsigned int i = begin /*Assuming it will always begin >= 1*/; i < end; ++i ){
+  for ( unsigned int i = begin; i < end; ++i ){
     if ( value == order_[i]) { return true; }
   }
   return false;

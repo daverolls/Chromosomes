@@ -42,14 +42,23 @@ class Deme {
   unsigned size_;     // Size of the index
   double mut_rate_;  // Mutation rate (fraction in range [0,1])
   unsigned pop_size_; // Size of the population
-  double total = 0.0;     // Keeping track of the current record
 
   std::default_random_engine generator_; // A random number generator for the various methods
 
-  void get_fitness_proportion_total(){
+  double get_fitness_proportion_total(){
+    double total = 0.0;
     for ( auto chrome : pop_ ){   // find the total sum of the fitness
       double fit = chrome->get_fitness();
       total += fit;
     }
+    return total;
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+  // A simple helper function to help us get a random value
+  // The random value is fixed between [0-1)
+  double myrandom_double () {
+    std::uniform_real_distribution<double> distribution(0.0,1.0);
+    return (distribution(generator_));
   }
 };
