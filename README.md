@@ -17,14 +17,14 @@ Recombine:
 1. we created a random permutation with the size of city ptr, then two variables for the back 
    element and front element of the random permutation. 
 2. Next, we obtained the random positions of those two elements and saved them.
-3. If the position 1 is bigger than the position 2, trade positions.
+3. if the position 1 is bigger than the position 2, trade positions.
 4. Then we use the given create_crossover_child to recombine and make new children
 5. Now a new pair has been generated. 
 Create_crossover_child:
 1. This is a given helper function for Recombine.
 
 Get_fitness: 
-1. Fitness is the total path distance of a permutation, so just return calculate_total_distance().
+1. fitness is the total path distance of a permutation, so just return calculate_total_distance().
 
 Is_valid:
 1. This method checks whether a chromosome has repeated values or indices above the range. 
@@ -53,14 +53,14 @@ Compute_next_generation:
 5. To ensure memory is cleared. We reset some values for other functions, such as "total", "highest", and "organizedChance" back to 0
 6. Then we delete all of the old chromosomes in "pop_" before saving the children into "pop_"
 
-Get_best:
+get_best:
 1. We have some starting values defined
 2. Using a for loop, we iterate all of the chromosomes
 3. Each chromosome is checked against the currently saved lowest value
 4. If the current chromosome surpasses our lowest value by being lower, we save it
 5. returns the pointer to the best chromosome
 
-Select_parent():
+select_parent():
 1. We have an empty vector list so compiler doesn't yell
 2. Essentially, if select_parent is called for the first time (based on if organizedChance.size() == 0), we create and fill "frequencyOfApperance".
 3. First we begin to iterate against "pop_" for all of the current chromosomes in for loop
@@ -87,7 +87,4 @@ This allows the bigger values to be knocked off early, and leaving behind the sm
 
 Valgrind: No memory leaks! Or atleast that what it claims
 
-Command used:
-1. g++ -g -Wall -Wextra -pedantic -Werror -std=c++17 cities.cc chromosome.cc deme.cc tsp.cc -o tsp
-2. "./tsp challenge.tsv 100 0.0005" which gives an estimate between 13k (worst) to 9k (best)
-3. Absolute lowest so far with the command above is 10095.2 It will have its photo as well from gnuplot
+Command used: "./tsp challenge.tsv 100 0.001" which gives an estimate between 13k (worst) to 10k (best)
