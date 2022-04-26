@@ -82,6 +82,7 @@ Chromosome::recombine(const Chromosome* other)
   auto child1 = create_crossover_child(this, other, randPos1, randPos2);
   auto child2 = create_crossover_child(other, this, randPos1, randPos2);
 
+  // Preparing to return
   std::pair<Chromosome*, Chromosome*> newPair;
 
   newPair.first = child1;
@@ -128,7 +129,7 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
 double
 Chromosome::get_fitness() const
 {
-  double fitness_= (1/calculate_total_distance());
+  double fitness_= (1/calculate_total_distance());    // If it's less distance, than its a greater fraction.
   return fitness_;
 }
 
@@ -142,9 +143,10 @@ Chromosome::is_valid() const
   std::vector<unsigned int> newPermutation;
   for (unsigned int i = 0; i <= size_; ++i) { newPermutation.push_back( i ); }
 
-  //Checking if their the same length & make sure there's no repeated value in the permutation.
+  //Checking if their the same length & make sure there's no repeated value in the permutation. Based on how is_permutation() works.
   bool answer1 = std::is_permutation(order_.cbegin(), order_.cend(), newPermutation.cbegin());
   bool answer2 = std::is_permutation(newPermutation.cbegin(), newPermutation.cend(), order_.cbegin());
+  
   // Obtaining the result and is done below so it looks easier to read
   return (answer1 && answer2);
 }
