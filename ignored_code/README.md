@@ -1,3 +1,15 @@
+Hey their grader. Just to let you know why this folder exists at all. It's only kept as a relic.
+A relic of a piece of broken code that computed around <10k city distance consistantly.
+
+It's considered broken because it had the old header file (chromosomes.hh).
+If you out of curiosity wish to understand how pure randomness helped to consistantly do better than cities, and get around 10k? Than feel free to do.
+
+But do not grade this. This is a mere relic of code that is not simplified, nor easier to fully understand, and not full commented
+
+Enjoy
+
+---------------------------------------------------------------------------------------------------- 
+
 Dubin Nam, Alonzo Ortiz-Sanchez
 
 ---------------------------------------------------------------------------------------------------- 
