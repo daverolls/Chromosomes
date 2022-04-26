@@ -72,13 +72,15 @@ get_fitness_proportion_total:
 1. A simple helper function to obtain the sum total of fitness from all chromosomes
 
 select_parent():
+0. If this is a new populaiton made recently. We do steps 1-5. Otherwise we go directly to 6
 1. Uses helper function to obtain total sum of fitness
-2. Than we produce a random number from our helper function
-3. We set a variable called probability to 0, where it will eventually reach to 1 in the for loop
-4. Have a for loop iterate all chromosomes. Add the current fitness based on the (chromosomes fitness / total sum) to the probability variable
-5. If the variable beats the random number, we select that chromosome. Else we continue
-6. If for some reason the random number is >1 than we have an assert to crash the program, and a return with "nullptr" so the compiler stops yelling at us.
+2. Uses a lambda and a stl function called "min_element" to obtain the lowestest number found in "pop_->get_fitness()"
+3. iterate all chromosomes in "pop_" 
+4. Uses "endurance" which is the lowest number found and is used to subtract on the second for loop some fitness value.
+5. Essentially. If the current fitness value is fairly high, than endurance will barely make a dent. Allowing the second loop to keep adding in "trial" the pointer of the current chromosome. Otherwise it essentially it will add less to "trial"
+6. Then we use a stl random function to choose a random index in "trial"
+7. Return the chromsome saved in trail
 
 Valgrind: No memory leaks! Or atleast that what it claims
 
-Command used: "./tsp challenge.tsv 4 0.7" which gives an estimate between 21k (worst) to 18k (best)
+Command used: "./tsp challenge.tsv 10 0.0075" which gives an estimate between 17k (worst) to 13k (best)
