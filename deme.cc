@@ -41,9 +41,7 @@ void Deme::compute_next_generation()
   std::vector<Chromosome*> swapPop;
   int max = floor((pop_size_)/2);
   for (int i = 0; i < max; ++i){
-    std::cout << "First time" << std::endl;
     Chromosome* const parent1 = select_parent();
-    std::cout << "Second time" << std::endl;
     Chromosome* const parent2 = select_parent();
 
     // Might mutate parent
@@ -58,7 +56,6 @@ void Deme::compute_next_generation()
   // Cleaning up memory
   for (auto chrome : pop_ ) { delete chrome; }    // Possible fix to memory error
   trial.clear();
-  std::cout << "finished" << std::endl;
   pop_ = swapPop; // Recreating population
 }
 
@@ -87,15 +84,12 @@ Chromosome* Deme::select_parent()
     for ( auto chromeptr : pop_ ){
       double endurance = lowest / total;
       for ( double currentFitness = (chromeptr->get_fitness() / total); currentFitness > 0; currentFitness -= endurance ){
-        std::cout << trial.size() << std::endl;
         trial.push_back(chromeptr);    // Adding it to the main table it will use
       }
     }
   }
   // Randomness based on how big "trail" is
-  std::uniform_int_distribution<int> distribution(0, trial.size());
+  std::uniform_int_distribution<int> distribution(0, (trial.size()-1));
   int result = (distribution(generator_));
-
-  std::cout << "I was ran ";
   return trial[result];
 }

@@ -30,9 +30,6 @@ Chromosome::~Chromosome()
 void
 Chromosome::mutate()
 {
-  // Obtains a new permutation to mess with.
-  auto newPermutation = random_permutation(cities_ptr_->size());
-
   // Obtianing our two new randomly choosen positions to check in "order".
   unsigned int randPos1 = myrandom_int_size();
   unsigned int randPos2 = myrandom_int_size();

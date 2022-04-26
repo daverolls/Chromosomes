@@ -57,7 +57,7 @@ class Deme {
   }
 
   // A simple helper function to help us get a random value
-  // The random value is fixed between [0-1)
+  // The random value is fixed between [0-1]
   double myrandom_double () {
     std::uniform_real_distribution<double> distribution(0.0,1.0);
     return (distribution(generator_));
