@@ -39,9 +39,9 @@ class Deme {
   virtual Chromosome* select_parent();
 
   std::vector<Chromosome*> pop_;  // Population of Chromosomes
-  unsigned size_;     // Size of the index
-  double mut_rate_;  // Mutation rate (fraction in range [0,1])
-  unsigned pop_size_; // Size of the population
+  unsigned int pop_size_ = 0; // Size of the population
+  double mut_rate_ = 0.0;  // Mutation rate (fraction in range [0,1])
+  std::vector<Chromosome*> trial; // A vector of chromosomes that has been modified, but preserved to be ran only once
 
   std::default_random_engine generator_; // A random number generator for the various methods
 

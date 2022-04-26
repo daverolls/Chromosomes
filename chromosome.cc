@@ -12,8 +12,7 @@
 // Generate a completely random permutation from a list of cities
 Chromosome::Chromosome(const Cities* cities_ptr)
   : cities_ptr_(cities_ptr),
-    order_(random_permutation(cities_ptr->size())),
-    generator_(rand())
+    order_(random_permutation(cities_ptr->size()))
 {
   size_ = cities_ptr->size()-1;      // Keeping track of the size it began with
   assert(is_valid());
@@ -129,7 +128,7 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
 double
 Chromosome::get_fitness() const
 {
-  double fitness_= (1/calculate_total_distance());    // If it's less distance, than its a greater fraction.
+  double fitness_= (1/(calculate_total_distance()));    // If it's less distance, than its a greater fraction.
   return fitness_;
 }
 
@@ -146,7 +145,7 @@ Chromosome::is_valid() const
   //Checking if their the same length & make sure there's no repeated value in the permutation. Based on how is_permutation() works.
   bool answer1 = std::is_permutation(order_.cbegin(), order_.cend(), newPermutation.cbegin());
   bool answer2 = std::is_permutation(newPermutation.cbegin(), newPermutation.cend(), order_.cbegin());
-  
+
   // Obtaining the result and is done below so it looks easier to read
   return (answer1 && answer2);
 }

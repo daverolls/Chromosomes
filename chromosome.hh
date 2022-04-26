@@ -81,15 +81,15 @@ class Chromosome {
   // [begin, end) and false otherwise.
   bool is_in_range(unsigned value, unsigned begin, unsigned end) const;
 
-  unsigned int size_;  // How the size of the vector "order_" initially began
+  unsigned int size_ = 0;  // How the size of the vector "order_" initially began
   const Cities* cities_ptr_; // Keep ptr to cities, no need for full copy
   Cities::permutation_t order_;  // The actual permutation of this chromosome
 
   std::default_random_engine generator_; // A random number generator for the various methods
 
-   
+
   // A simple function that uses the generator object member to pick in a fair random way Some integer.
-  // It's picking from 0 to size_ member. 
+  // It's picking from 0 to size_ member.
   // This function is primarely called when needing a random index for a vector.
   int myrandom_int_size () {
     std::uniform_int_distribution<int> distribution(0, size_);

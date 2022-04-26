@@ -5,6 +5,7 @@
 
 #include "chromosome.hh"
 #include "deme.hh"
+#include <algorithm>
 
 //////////////////////////////////////////////////////////////////////////////
 // Generate a Deme of the specified size with all-random chromosomes.
@@ -14,7 +15,6 @@ Deme::Deme(const Cities* cities_ptr, unsigned pop_size, double mut_rate)
   // Defining
   mut_rate_ = mut_rate;
   pop_size_ = pop_size;
-  size_ = cities_ptr->size()-1;
 
   // Constructing our population based on math
   for (unsigned int i = 0; i <= pop_size; ++i) { pop_.push_back(new Chromosome( cities_ptr )); }
@@ -41,9 +41,11 @@ void Deme::compute_next_generation()
   std::vector<Chromosome*> swapPop;
   int max = floor((pop_size_)/2);
   for (int i = 0; i < max; ++i){
-    Chromosome* parent1 = select_parent();
-    Chromosome* parent2 = select_parent();
-    
+    std::cout << "First time" << std::endl;
+    Chromosome* const parent1 = select_parent();
+    std::cout << "Second time" << std::endl;
+    Chromosome* const parent2 = select_parent();
+
     // Might mutate parent
     if ( myrandom_double() < mut_rate_ ) { parent1->mutate(); }
     if ( myrandom_double() < mut_rate_ ) { parent2->mutate(); }
@@ -55,6 +57,8 @@ void Deme::compute_next_generation()
   }
   // Cleaning up memory
   for (auto chrome : pop_ ) { delete chrome; }    // Possible fix to memory error
+  trial.clear();
+  std::cout << "finished" << std::endl;
   pop_ = swapPop; // Recreating population
 }
 
@@ -62,18 +66,8 @@ void Deme::compute_next_generation()
 // Return a copy of the chromosome with the highest fitness.
 const Chromosome* Deme::get_best() const
 {
-  // Defining
-  Chromosome* bestChrome;
-  double absoluteLowest = -1.0;    // It's impossible for negative number, so its a good first case
-
-  // Iterate all of the population
-  for ( auto chrome : pop_) {
-    if ( absoluteLowest > chrome->get_fitness() || absoluteLowest < 0 ) {
-      bestChrome = chrome;
-      absoluteLowest = bestChrome->get_fitness();
-    }
-  }
-  return bestChrome;
+  // Finds best chromsome based on the lambda with stl.
+  return *std::max_element(pop_.cbegin(), pop_.cend(), []( auto pointerOne, auto pointerTwo ){ return pointerOne->get_fitness() < pointerTwo->get_fitness(); });
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -85,14 +79,23 @@ const Chromosome* Deme::get_best() const
 // Before applying the randomness found
 Chromosome* Deme::select_parent()
 {
-  double total = get_fitness_proportion_total();
-  double randNum = myrandom_double();
-  double probability = 0;
-  
-  for ( auto chromeptr : pop_ ){   // Keep adding probability until it beats the random number thats between [0-1)
-    probability += ((chromeptr->get_fitness())/total);    // ((1/totalcity distance) / total fit value)
-    if ( probability > randNum ) { return chromeptr; }
+  // Construct the vector that randomness will use
+  if (trial.size() == 0){
+
+    double lowest = (*std::min_element(pop_.cbegin(), pop_.cend(), []( auto pointerOne, auto pointerTwo ){ return pointerOne->get_fitness() < pointerTwo->get_fitness();}))->get_fitness();
+    double total = get_fitness_proportion_total();
+    for ( auto chromeptr : pop_ ){
+      double endurance = lowest / total;
+      for ( double currentFitness = (chromeptr->get_fitness() / total); currentFitness > 0; currentFitness -= endurance ){
+        std::cout << trial.size() << std::endl;
+        trial.push_back(chromeptr);    // Adding it to the main table it will use
+      }
+    }
   }
-  assert(nullptr);
-  return nullptr;
+  // Randomness based on how big "trail" is
+  std::uniform_int_distribution<int> distribution(0, trial.size());
+  int result = (distribution(generator_));
+
+  std::cout << "I was ran ";
+  return trial[result];
 }
