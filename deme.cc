@@ -43,8 +43,7 @@ void Deme::compute_next_generation()
   for (int i = 0; i < max; ++i){
     Chromosome* parent1 = select_parent();
     Chromosome* parent2 = select_parent();
-    if (parent1 == parent2) { parent2 = select_parent(); }  // When their equal
-
+    
     // Might mutate parent
     if ( myrandom_double() < mut_rate_ ) { parent1->mutate(); }
     if ( myrandom_double() < mut_rate_ ) { parent2->mutate(); }
@@ -82,15 +81,16 @@ const Chromosome* Deme::get_best() const
 // return a pointer to that chromosome.
 //
 // It now also uses something called "Fitness proportion selection"
-// However it's made inversely from the actual implementation
+// Where it tries to increase probability by knowing the sum total primarely and dividing it.
+// Before applying the randomness found
 Chromosome* Deme::select_parent()
 {
   double total = get_fitness_proportion_total();
   double randNum = myrandom_double();
   double probability = 0;
   
-  for ( auto chromeptr : pop_ ){   // save the fractions of probability for each chromosome to be choosen
-    probability += ((chromeptr->get_fitness())/total);
+  for ( auto chromeptr : pop_ ){   // Keep adding probability until it beats the random number thats between [0-1)
+    probability += ((chromeptr->get_fitness())/total);    // ((1/totalcity distance) / total fit value)
     if ( probability > randNum ) { return chromeptr; }
   }
   assert(nullptr);
