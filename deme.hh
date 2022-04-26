@@ -45,6 +45,8 @@ class Deme {
 
   std::default_random_engine generator_; // A random number generator for the various methods
 
+  // A simple helper function to obtain the sum total of fitness
+  // This will be used on the "select_parent" function
   double get_fitness_proportion_total(){
     double total = 0.0;
     for ( auto chrome : pop_ ){   // find the total sum of the fitness
@@ -54,7 +56,6 @@ class Deme {
     return total;
   }
 
-  //////////////////////////////////////////////////////////////////////////////
   // A simple helper function to help us get a random value
   // The random value is fixed between [0-1)
   double myrandom_double () {
